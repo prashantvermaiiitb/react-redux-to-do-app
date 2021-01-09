@@ -2,17 +2,19 @@
  * list of to-do's for the project
  * container will be reading the data for showing to user
  */
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-import {updateItem, updatedItem, removeItem} from '../actions/todo-action-handler';
-import {bindActionCreators} from 'redux';
+// import {updateItem, updatedItem, removeItem} from '../actions/todo-action-handler';
+import * as toDoActions from '../actions/todo-action-handler';
+import { bindActionCreators } from 'redux';
 
 /**
  * Individual To Do Item
  */
 class ToDo extends Component {
     render() {
+
         /**
          * @todo name of the function has been updated to todoClick
          */
@@ -23,9 +25,9 @@ class ToDo extends Component {
              */
             return (
                 <div>
-                    <input type="text" ref="todoUpdateBox" placeholder={this.props.todo.text}/>
+                    <input type="text" ref="todoUpdateBox" placeholder={this.props.todo.text} />
                     <button onClick={() => {
-                        this.props.updatedItem({id: this.props.todo.id, text: this.refs.todoUpdateBox.value})
+                        this.props.updatedItem({ id: this.props.todo.id, text: this.refs.todoUpdateBox.value })
                     }} className="update-item">Update Item
                     </button>
                     <button onClick={() => {
@@ -48,13 +50,20 @@ class ToDo extends Component {
  */
 class ToDoList extends Component {
     render() {
+        // console.log(this.props);
+        const { updateItem, updatedItem, removeItem } = this.props.actions;
+
         //you have list generated and still you have to select the item for updation
         return (
             <ul>
-                {this.props.todos.map((todo) => (
+                {this.props.todos.map((todo) => {
+                    return <ToDo key={todo.id} todo={todo} updateItem={updateItem}
+                        updatedItem={updatedItem} removeItem={removeItem} />;
+                
+                    {/* version1.0
                     <ToDo key={todo.id} todo={todo} updateItem={this.props.updateItem}
-                          updatedItem={this.props.updatedItem} removeItem={this.props.removeItem}/>
-                ))}
+                        updatedItem={this.props.updatedItem} removeItem={this.props.removeItem} /> */}
+                })}
             </ul>
         );
     }
@@ -79,11 +88,21 @@ function mapPropsToState(state) {
  */
 function matchDispatchToProps(dispatch) {
     //this is just "bind" a synonym for connect
-    return bindActionCreators({
-        updateItem: updateItem,
-        updatedItem: updatedItem,
-        removeItem: removeItem
-    }, dispatch);//
+    //version 1.0
+    // return bindActionCreators({
+    //     updateItem: updateItem,
+    //     updatedItem: updatedItem,
+    //     removeItem: removeItem
+    // }, dispatch);//
+    // console.log(toDoActions);
+    
+    //version 2.0
+    /**
+     * Getting all the functions wrapped in 1 shot
+     */
+    return {
+        actions: bindActionCreators(toDoActions, dispatch)
+    }
 }
 
 
