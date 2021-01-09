@@ -94,11 +94,12 @@ function matchDispatchToProps(dispatch) {
     //     updatedItem: updatedItem,
     //     removeItem: removeItem
     // }, dispatch);//
-    // console.log(toDoActions);
+    // accessible using this.props.updateItem like that in the component.
     
     //version 2.0
     /**
      * Getting all the functions wrapped in 1 shot
+     * accessible using this.props.actions.updateItem() like that
      */
     return {
         actions: bindActionCreators(toDoActions, dispatch)
