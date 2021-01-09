@@ -46,18 +46,23 @@ export default function (state = defaultData, action) {
             }
             // return [...state, action.payload]; //@todo this has to be done because we cannot update the state
             return [...tmp];//@todo since tmp is a reference copy it has to be broken down and created new one
-            break;
         case AppConstants.UPDATE_TODO:
 
-            var tmp = state;
-            tmp.forEach(function (todo) {
+            // var tmp = [...state];//since we are getting the state reference directly we have to create new variable
+            // tmp.forEach(function (todo) {
+            //     if (todo.id == action.payload.id) {
+            //         todo.hasToBeUpdated = true;
+            //     }
+            // });
+            // return tmp;
+            // console.log('state ... ',state);
+            
+            return state.map(function (todo) {
                 if (todo.id == action.payload.id) {
                     todo.hasToBeUpdated = true;
                 }
+                return todo;
             });
-            return [...tmp];//since we are getting the state reference directly we haveto create new variable
-            break;
-
         case AppConstants.UPDATED_TODO:
 
             var tmp = state;
@@ -71,20 +76,21 @@ export default function (state = defaultData, action) {
                 }
             });
             return [...tmp];//since we are getting the state reference directly we haveto create new variable
-            break;
 
         case AppConstants.REMOVE_TODO:
 
-            var tmp = state, tmp2 = [];
+            // var tmp = state, tmp2 = [];
 
-            for (var i = 0; i < tmp.length; i++) {
-                if (tmp[i].id != action.payload.id) {
-                    tmp2.push(tmp[i]);
-                }
-            }
-            console.log('Final data to be returned:', tmp2);
-            return tmp2;//here tmp2 is separate from that of state so no refererence
-            break;
+            // for (var i = 0; i < tmp.length; i++) {
+            //     if (tmp[i].id != action.payload.id) {
+            //         tmp2.push(tmp[i]);
+            //     }
+            // }
+            // console.log('Final data to be returned:', tmp2);
+            
+
+            // return tmp2;//here tmp2 is separate from that of state so no refererence
+            return [...state].filter(todo => todo.id !== action.payload.id);
 
     }
     return state;
